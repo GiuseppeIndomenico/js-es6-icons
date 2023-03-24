@@ -123,3 +123,69 @@ const icons = [
         color: 'blue'
     }
 ];
+//per prima cosa andiamo a creare la funzione che permette di creare le card tutte uguali prendendo dall'array tutti i dati degli oggetti;
+function CreateCard() {
+    const row = document.querySelector('.row');
+    row.innerHTML = '';
+
+    icons.forEach((value) => {
+        const card = `        
+        <div class="col-12 col-md-4 col-lg-3">
+            <div class="card bg-light">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center fs-3 py-4 ${value.color}">
+                    <i class="${value.prefix}${value.family} ${value.prefix}${value.name}"></i>
+                    <span>${value.name}</span>
+                </div>
+            
+            </div>
+
+        </div>`
+        row.innerHTML += card
+    });
+
+
+}
+
+function drawType(selectedType) {
+    
+    const filteredType = icons.filter((value) => {
+        if (selectedType === "all" || value.type === selectedType) {
+            return true;
+        } else {
+            return false;
+        }
+
+
+
+    })
+    filteredType.forEach((value)=>{
+
+        CreateCard(value)
+    })
+
+}
+
+function selectType() {
+    drawType(this.value)
+}
+
+const select = document.getElementById('type');
+select.addEventListener('change', selectType);
+
+
+drawType(select.value)
+
+
+
+// function createOptions() {
+//     const select = document.querySelector('select');
+
+//     for (const key in icons) {
+//         if (icons.hasOwnProperty.call(icons, key)) {
+//             let element = []
+//             element = icons[key].type;
+//             console.log(element);
+//         }
+//     }
+// }
+
