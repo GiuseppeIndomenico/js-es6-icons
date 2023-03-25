@@ -121,18 +121,34 @@ const icons = [
         type: 'user',
         family: 'solid',
         color: 'blue'
-    }
+    },
 ];
+const select = document.getElementById('type');
+let arrayOption= [];
+icons.forEach(element => {
+  if(!arrayOption.includes(element.type)){
+        arrayOption.push(element.type);
+    }
+       
+});
+arrayOption.unshift('all');
+function listOption() {
+    arrayOption.forEach(element => {
+        const option= `<option value="${element}">${element}</option>`
+        select.innerHTML+=option;
+    });
+}
+listOption();
+
 //per prima cosa andiamo a creare la funzione che permette di creare le card tutte uguali prendendo dall'array tutti i dati degli oggetti;
-function CreateCard() {
+function CreateCard(arrayfiltered) {
     const row = document.querySelector('.row');
     row.innerHTML = '';
-
-    icons.forEach((value) => {
+    arrayfiltered.forEach((value) => {
         const card = `        
         <div class="col-12 col-md-4 col-lg-3">
             <div class="card bg-light">
-                <div class="card-body d-flex flex-column justify-content-center align-items-center fs-3 py-4 ${value.color}">
+                <div style="color:${value.color}" class="card-body d-flex flex-column justify-content-center align-items-center fs-3 py-4 ">
                     <i class="${value.prefix}${value.family} ${value.prefix}${value.name}"></i>
                     <span>${value.name}</span>
                 </div>
@@ -142,59 +158,28 @@ function CreateCard() {
         </div>`
         row.innerHTML += card
     });
+}
+CreateCard(icons);
 
-
+const filterIcons = (selectedValue)=>{
+    console.log(selectedValue);
+    let filteredIcons;
+    if(selectedValue === 'all'){
+        filteredIcons = icons;
+    }else{
+        filteredIcons = icons.filter(element => element.type === selectedValue);
+    }
+   CreateCard(filteredIcons);
 }
 
-function drawType(selectedType) {
-
-    const filteredType = icons.filter((value) => {
-        if (selectedType === "all" || value.type === selectedType) {
-            return true;
-        } else {
-            return false;
-        }
-
-
-
-    })
-    filteredType.forEach((value) => {
-
-        CreateCard(value)
-    })
-
+const handleChange = function typeSelector() {
+    //recuperiamo l'oggetto select trasportato da this (che sarà un array di option);
+    const selectObject = this;
+    //recuperiamo l'index della option selezionata e il suo valore;
+    const indexSelected= selectObject.selectedIndex;
+    const selectedValue = selectObject.options[indexSelected].value;
+    filterIcons(selectedValue);
 }
 
-function selectType() {
-    drawType(this.value)
-}
-
-const select = document.getElementById('type');
-select.addEventListener('change', selectType);
-
-
-drawType(select.value)
-
-function createArrayOption() {
-    let filterArray = [];
-    icons.filter((value) => {
-        let arrType = type.value;
-        if (!filterArray.includes(arrType)) {
-            filterArray.push(arrType)
-        }
-    })
-    return filterArray
-}
-
-function createOptions(value) {
-
-    let arrayOption = createArrayOption(value);
-    options = ''
-    arrayOption.forEach((value) => {
-        options += ` <option value="${value}">${value}</option>`
-    })
-    select.innerHTML += options;
-}
-
-createOptions(icons)
+select.addEventListener('change', handleChange);
 
