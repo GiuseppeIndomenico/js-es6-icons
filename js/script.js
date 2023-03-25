@@ -147,7 +147,7 @@ function CreateCard() {
 }
 
 function drawType(selectedType) {
-    
+
     const filteredType = icons.filter((value) => {
         if (selectedType === "all" || value.type === selectedType) {
             return true;
@@ -158,7 +158,7 @@ function drawType(selectedType) {
 
 
     })
-    filteredType.forEach((value)=>{
+    filteredType.forEach((value) => {
 
         CreateCard(value)
     })
@@ -175,17 +175,26 @@ select.addEventListener('change', selectType);
 
 drawType(select.value)
 
+function createArrayOption() {
+    let filterArray = [];
+    icons.filter((value) => {
+        let arrType = type.value;
+        if (!filterArray.includes(arrType)) {
+            filterArray.push(arrType)
+        }
+    })
+    return filterArray
+}
 
+function createOptions(value) {
 
-// function createOptions() {
-//     const select = document.querySelector('select');
+    let arrayOption = createArrayOption(value);
+    options = ''
+    arrayOption.forEach((value) => {
+        options += ` <option value="${value}">${value}</option>`
+    })
+    select.innerHTML += options;
+}
 
-//     for (const key in icons) {
-//         if (icons.hasOwnProperty.call(icons, key)) {
-//             let element = []
-//             element = icons[key].type;
-//             console.log(element);
-//         }
-//     }
-// }
+createOptions(icons)
 
